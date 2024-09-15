@@ -36,6 +36,22 @@
             color: #fff;
             outline: none;
         }
+        /* Styles for the restart button */
+        #restartBtn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 15px 30px;
+            font-size: 24px;
+            border: none;
+            border-radius: 10px;
+            background-color: #ff6347;
+            color: #fff;
+            cursor: pointer;
+            display: none; /* Hidden by default */
+            z-index: 2;
+        }
     </style>
 </head>
 <body>
@@ -46,6 +62,9 @@
         <button id="leftBtn">◀️</button>
         <button id="rightBtn">▶️</button>
     </div>
+
+    <!-- Restart button -->
+    <button id="restartBtn">Restart</button>
 
     <script>
         // Get canvas and context
@@ -107,6 +126,9 @@
         var gravity = 0.2; // Gravity constant
         var score = 0;
         var isGameOver = false;
+
+        // Get the restart button
+        var restartBtn = document.getElementById('restartBtn');
 
         // Initialize platforms
         function initPlatforms() {
@@ -297,16 +319,20 @@
 
         // Handle game over
         function gameOver() {
+            // Show the restart button
+            restartBtn.style.display = 'block';
+
             ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
             ctx.fillRect(0, 0, width, height);
 
             ctx.fillStyle = '#fff';
             ctx.font = '36px Arial';
             ctx.textAlign = 'center';
-            ctx.fillText('Game Over', width / 2, height / 2 - 30);
+            ctx.fillText('Game Over', width / 2, height / 2 - 60);
             ctx.font = '24px Arial';
-            ctx.fillText('Score: ' + score, width / 2, height / 2);
-            ctx.fillText('Press Enter to Restart', width / 2, height / 2 + 30);
+            ctx.fillText('Score: ' + score, width / 2, height / 2 - 20);
+            ctx.font = '20px Arial';
+            ctx.fillText('Press Enter or Tap Restart to Play Again', width / 2, height / 2 + 20);
         }
 
         // Main game loop
@@ -374,6 +400,13 @@
         rightBtn.addEventListener('touchend', function(e) {
             e.preventDefault();
             keys['ArrowRight'] = false;
+        });
+
+        // Event listener for the restart button
+        restartBtn.addEventListener('click', function() {
+            restartGame();
+            // Hide the restart button after restarting
+            restartBtn.style.display = 'none';
         });
 
         // Restart game
